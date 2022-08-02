@@ -1,6 +1,6 @@
 ## Ignore local copies of NCS bibliography file 
 ## master copy is maintained at https://code.ini.uzh.ch/ncs/papers/biblio
-## biblioncs.bib
+biblioncs.bib
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
