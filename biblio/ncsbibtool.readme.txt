@@ -1,0 +1,116 @@
+NCS bibtool user guide (Linux)
+==============================
+
+ncsbib.sh script
+----------------
+
+The ncsbib.sh script is intended to be used to keep the format of the
+biblioncs.bib file tidy using bibtool.
+To do this, it uses the bibtool resource file
+bibtool_biblioncs_resourcefile.txt
+
+Important: bibtool won't modify the author names, so please make sure they
+follow the general convention of "X. Lastname and Y.-Z. Other Last Name". In
+particular, make sure all the names follow the same convention, otherwise
+bibtool will get confused in guessing the lastnames. Also make sure the entry
+is in plain ASCII (use LaTeX commands for non ASCII ch{\'a}r{\"}act{\`e}rs).
+
+Usage example:
+    1. open biblioncs.bib
+    2. copy the bibtex entry from google scholar
+    3. past it at the end of the list in biblio.bib
+    [ or use JabRef (http://jabref.sourceforge.net/) for steps 1-3 ]
+    4. do:
+        $ ncsbib.sh
+    5. *important* review the biblioncs_new.bib file by using a diff tool and
+       checking for sorting, keys and so on e.g.:
+        $ vimdiff biblioncs.bib biblioncs_new.bib
+    6. finalize biblioncs_new.bib and copy it over biblioncs.bib
+    7. repeat 4-6 until no diff found and all bibtex keys look OK
+    8. git add, commit and push
+
+How bibtool is used by the ncsbib.sh script
+-------------------------------------------
+
+The "bibtool" command is used to (re)organize the bibliography file.
+bibtool can reformat and sort the bibliography file entries, and
+(re)generate keys.
+
+Syntax:
+$ bibtool -r bibtool_biblioncs_resourcefile.txt biblioncs.bib > biblioncs_new.bib
+
+The bibtool_biblioncs_resourcefile.txt file contains preferences for the NCS
+group biblio file format.
+
+
+NCS bibtool programmer's guide
+==============================
+
+Here is an example resource file with a brief explanation of the rules used. To
+understand in detail the syntax, read the bibtool manual.
+
+Example
+-------
+
+    preserve.key.case={on}
+    sort={on}
+    sort.format={%N(author)#%N(editor)#%N(publisher)#%4d(year)}
+    sort.order {* author # title # journal # howpublished # chapter # publisher # editor # year # month # number # volume # pages # note # address # series # organization #key # text}
+    key.base={lower}
+    key.number.separator={}
+    fmt.name.name={_}
+    fmt.et.al={_etal}
+    ignored.word={on}
+    rewrite.rule={"^\"\([^#]*\)\"$" "{\1}"}
+    rewrite.rule={ pages # "\([0-9]+\) *- *\([0-9]+\)" = "\1--\2" }
+    rewrite.rule={ "^\([0-9]+\)$" = "\{\1\}" }
+    rewrite.rule={ timestamp # } 
+    rewrite.rule={ owner # }     
+    key.format={ 
+    {
+    %2.2#n(author)%2n(author)%2d(year)
+    # %1n(author)%2d(year)
+    # %n(editor)%2d(year)
+    }
+    #
+    {%1n(key)}
+    #
+    {%3T(title)}
+    }
+    #
+    %s($default.key)
+
+Rules description
+-----------------
+
+The "sort" rules deal with sorting and ordering of entries
+
+The "key" and "fmt" rules deal with the key generation basic
+formatting rules.
+
+The ignored.word rule adds "on" to the list of ignored words, for the
+"title" key generation
+
+The rewrite rules do the following:
+replace all "(" and ")" with "{" and "}"
+replace all "-" with "--" in the bibtex pages fields
+remove all "timestamp" and "owner" fields
+
+The key format rule is used to generate keys. The "#" indicate
+alternatives:
+the first alternative is for author-keys;
+the second is for records with no authors/editors and an explicit
+"key" field;
+the third is for records with no authors/editors or key fields, and
+uses the title field to generate the key;
+the last alternative should use the bibtool default
+
+
+Notes
+=====
+
+To get rid of the "References" title when including a bibtex bibliography, use
+the command:
+    \renewcommand\bibsection{}
+before \begin{thebibliography} or \bibliography{...}
+

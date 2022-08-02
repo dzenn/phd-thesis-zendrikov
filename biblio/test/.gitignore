@@ -1,0 +1,10 @@
+acros.tex
+citeall.tex
+*.aux
+test.bbl
+test.blg
+test.log
+test.pdf
+texput.log
+test.fdb_latexmk
+test.fls
