@@ -1,0 +1,57 @@
+\chapter{Discussion}
+\label{ch:discussion}
+
+%\dz{IDEA: this thesis is STRANDED between domains. It attempts to touch theoretical and applied sides through the initial hardware-based approach.}
+
+\dz{Something to introduce this section}
+
+\section{Outlook}
+
+\dz{What can be done using my tools}
+
+\dz{What can be done as a community in the future using neuromorphic technology}
+
+
+\section{Understanding by building: the concept tested}
+
+While overcoming the constraints of the specific chip to implement brain-like computation, we found that brain-inspired strategies are very much applicable at almost every step. A lot of parallels can be drawn, as the hardware and biological constraints share the resource budget deficit and imprecision of single units.
+
+The resulting framework also gives a good hands-on intuition for the neural concepts as it allows to interact with it in real-time and see the immediate changes. The concepts of population coding and networks relations, competition in \ac{WTA} structures, delay lines and oscillators are all unified under the umbrella of the single general-purpose chip, rather than specific and hard-to-use dedicated devices. I propose that the educational aspect of the proposed framework holds not the least value for the community. The experience of dealing with a fast-responding interactive system is much more visceral than just analysis of data plots. Which fits, ironically, as discussed at the beginning, that human brains are suited to learning from experience rather than from logical reasoning.
+
+\section{Chip-in-the-loop approach as a testbench for novel learning rules before their implementation in hardware}
+
+The chip's reprogrammable routing exploit we used to implement the R-STDP learning rule can be used for other weight update algorithms. The benefit of this approach is the ``free'' neural and synaptic dynamics, while the learning rule runs in parallel. The only constraint is the on-chip matrix update that cannot be done more than a few times per second.
+
+The learning framework is adaptable for gradient-based learning rules as well, enabling transfer learning or surrogate gradient training.
+
+
+\section{Transferability of the strategies and tools to other hardware systems}
+
+All of the strategies discussed have been shown to be effective in simulations. Therefore, any network design deployed on digital SNN accelerators would also benefit from them directly, having that deterministic numerical simulation precision.
+
+For analog neuromorphic hardware that shares the properties and constraints with the DYNAP-SE1 board, this work gives a relevant example and a practical confirmation of the methodology.
+
+
+
+%\section{Spiking networks are yet to find (their own domain of) application (to be removed, too general)}
+
+%SNNs are a separate operational system to ANNs, therefore the benchmarks should not be directly applied, they should not compete
+
+\section{Transferability of the building blocks to the future users}
+
+As it often happens, the systems developed by the defending doctoral students are often left abandoned once they graduate, as those are highly fragile and sensitive prototypes. We experienced that when using Nicoletta Risi's DAVIS-DYNAP-SE1 setup, as we had to ask for a lot of guidance despite all of the documentation written by her.
+
+For my work, I am hoping that the documentation and the coding style are easy enough to pick up to start working with the WTAs and delay lines on a DYNAP-SE1 board right away.
+
+
+
+
+\section{Personal interest}
+
+In the course of this work, my main interest remained in understanding what kind of computation can be done by spiking neurons. The best way of learning about complex systems for me has always been playing with them. Building an intuition by trying and failing, fulfilling an irrational ``what if..?'' request, starting with the most basic elements constituting a bigger system. In the bachelor physics studies, we learn Kepler's laws of orbital dynamics or the equations of the special theory of relativity governing perceived space and colour distortions, and we have some idea of them. Still, it takes a silly video game where the player moves around experiencing the modeled environment in a tight behavioural loop (and thus engaging their navigation neural circuits) to make those concepts much more tangible. And suddenly, the remote concepts feel much more accessible. We return to the equations, which make much more sense.
+
+In the same way, I realised that working with a real-time neuromorphic chip allows me to grasp the \emph{intuition of neural dynamics}, which drove me to create more and more visualization, interaction and characterization tools. The constraints of the specific chip architecture limited my exploration. So the question I got at hand was ``How can a pool of neurons and synapses that I characterized and understood do something useful?''. And, after reviewing the biological concepts, the network designs presented in this work answered some of those questions for me. Of course, the brain (of rodents or insects, I am not even going to address humans) performs unimaginably more complex operations to solve the tasks it manages to solve. Yet, I propose the approach of having an intuition about the building blocks is the right path to characterizing the emergent properties of the system comprised of those blocks, i.e. the ``bottom-up'' approach. I would like to not treat any system as a purely black box as much as possible.
+
+I ended up touching multiple domains (and possibly barely scratching the surface of most), but the biggest result of this work is the emergent understanding of how a relatively simple system can elicit quite complex nonlinear computation, how one can make such computation robust, what are the ways of transmitting information with spikes, and, specifically, how temporal information can be processed in a neural system; what are the ways of implementing such computation in hardware.
+
+An assumption that goes throughout the field of neuromorphic systems, as I experienced it, is that nature's solutions are economical and elegant. This ``elegance'' is perhaps hard to quantify, but it certainly is a factor in design choices.

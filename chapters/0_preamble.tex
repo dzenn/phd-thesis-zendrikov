@@ -4,16 +4,52 @@
 \chapter*{Abstract}
  \addcontentsline{toc}{chapter}{Abstract}
 
-The best most accurate and clear abstract to introduce my work
+Neuromorphic electronics provide a computational substrate that natively supports spiking neural networks through device physics, making them strong competitors for low-power edge computing applications. This class of devices is fundamentally different from conventional digital processors, and so is the computation they are capable of.
 
- \newpage
+Development path of this technology is about to reach a new stage, combining multiple domains, like CMOS circuits and memristive or ferroelectric devices, on the same die. To educate the upcoming design choices, it is necessary to build a firm understanding of the advantages and limitations of the current generation of chips, which can be done by systematically extracting the most out of them and identifying missing components for possible applications.
+
+This work represents a bottom-up journey of scientific exploration towards achieving robust neuromorphic computing. Having the dream of autonomous intelligent neuromorphic systems as a distant goal, we define and test computational primitives serving as building blocks for such intelligence. We use a current-generation general-purpose neuromorphic processor to demonstrate the accessibility of computational elements, previously implemented with application-specific circuits. Moreover, since the chip design is inspired by the nervous system at the lowest level, we demonstrate that the brain-derived strategies benefit coding and its robustness at the network level.
+
+Through analysis of individual neuron circuits, small populations and the exploitation of the reprogrammable routing scheme of the chip, we configure multiple network prototypes that implement i) a network of relations, ii) a model of unsupervised cortical map formation, iii) a spatiotemporal pattern classifier and iv) an example of closed-loop neuromorphic agent capable of reinforcement learning.
+
+As a result, we provide tools and insights into how neuromorphic hardware should be approached, showing how such seemingly different domains of computation, in fact, fit well under the umbrella of the same principles of space and time averaging, and introduced stochasticity.
+
+
+%\dz{DRAFT: Understanding by building is really the epitome of this work. While the tangible global task declared for the project had been to "build neuromorphic agents", it was formulated in a way that fosters bio-inspired methodological search, drastically constraining the field of possible solutions. This work represents the work philosophy and the results of what happens, when instead of paving a high-level path to a problem solution, one would rather focus on low-level details, crossing out some technologies and keeping the others, resulting in a small piece of this "edible pie" in the end, the intersection of all constraints. And only then, having this set of rules declared important, you begin to see what high-level task it would solve. This probably tells the story of a true bottom-up approach, spanning across multiple domains and converging to a functional prototype.}
+\newpage
  
- \chapter*{Acknowledgements}
- \addcontentsline{toc}{chapter}{Acknowledgements}
+\chapter*{Acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
 
- I will thank so many people here that tolerated my whining.
+This work is supported by the EU ERC Grant 'NeuroAgents' (No. 724295)
 
- \newpage
+%\begin{verbatim}
+%thesis thanks:
+%Giacomo for care, believing in me, and the art of scientific storytelling, the example of
+%    passion for the elegance of neuromorphic technology
+%my dad and family
+%Kathrin and Simone, not only administrative, but emotional support
+%Sergio (and Sonia) - for work discussions but also hospitality and good times on Sardinia
+%Alexander Paraskevov
+%NCS Group
+%Nicoletta 
+%Eugenia
+%Karina
+%Veronika 
+%Yulia for the inspiration to push and leading by example. And of course aviation
+%Hector for making me rebuild my mental health by reintegrating me into zurich music %scene
+%Maryada
+%Matteo
+%Moritz for setting a bar and an example, how to work and how to party. And CapoCaccia and Kafischnaps sessions
+%Matthew Cook
+%Vanessa (for sparkle and energy)
+%Leo for assuming i have all the answers and making me try to live up to expectations
+%Ayush
+%Alex & UW
+%Sasha
+%    
+%\end{verbatim}
+\newpage
 
 %---------------------------------------------------------------------------
 % Table of contents
@@ -28,9 +64,6 @@ The best most accurate and clear abstract to introduce my work
 
 \chapter*{Nomenclature}\label{chap:symbole}
  \addcontentsline{toc}{chapter}{Nomenclature}
-
-\section*{Symbols}
-
 
 \section*{Acronyms and Abbreviations}
 \input{biblio/acronyms_list}

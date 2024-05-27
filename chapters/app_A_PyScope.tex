@@ -1,3 +1,114 @@
- \chapter{Appendix A: PyScope Tool}
+ \chapter{PyGetScope Tool}
  \label{appendix:pyscope}
- 
+\pyobject{PyGetScope} is a Python tool for interaction with Agilent 4000x and 6000x series oscilloscopes~\cite{pygetscope}. It is a Python wrapper that uses \pyobject{pyvisa} library, sending SCPI commands and receiving data from devices allowing automated remote operation. Full functionality of this library is listed below. For installation and configuration instructions, please refer to the repository ReadMe section.\\
+
+\textbf{Link:} \url{https:/code.ini.uzh.ch/ncs/libs/pygetscope}
+
+\section{Initialization}
+
+The class is imported in a standard way, allowing interaction with the scope through a \verb|PyScope| object:
+
+\begin{lstlisting}[language=Python, caption=PyScope module initialization]
+from pygetscope.py_scope import PyScope
+my_scope = PyScope()
+\end{lstlisting}
+
+
+\section{Waveform acquisition}
+
+The core function \verb|get_waveform(|\verb|channel_id|, \verb|[num_points=1000, instant_plot=False|, \verb|keep_running=True])| of the \verb|PyScope| class returns a \pyobject{NumPy} array of data points in the format \verb|[timestamp, voltage]|, present in the currently visible screen area given the set vertical and horizontal scales and offsets.\\
+
+Additional arguments allow extended functionality:
+\begin{itemize}
+    \item \verb|num_points=[1000 .. 20000]| sets the number of datapoints returned by the scope. For values higher than 1000 the \verb|keep_running| argument is set to \verb|False| as the connection bandwidth becomes an issue 
+    \item \verb|instant_plot=[True\False]| immediately returns a \pyobject{PyPlot} of the recorded waveform
+    \item \verb|keep_running=[True\False]| sets if the oscilloscope should stop after the acquisition of the waveform (for extraction of synchronized waveforms from multiple channels)
+\end{itemize}
+
+
+\section{Controlling the oscilloscope}
+
+The rest of the library functionality contains tools to control the vertical and horizontal scales of the input signals, vertical offsets and the trigger. The \textbf{SET} functions pass apply the new values of the parameters, and the \textbf{GET} return the current values. If any of the physical knobs are turned on the device, the returned values would reflect that.
+
+\subsection*{Scaling}
+
+\textbf{SET} functions:
+\begin{itemize}
+    
+    \item \verb|set_timescale()| set the time scale in seconds
+    \item \verb|set_timebase_pos()| sets the horizontal offset of the waveform
+    \item \verb|set_channel_scale(channel_id, scale)| sets the vertical scale for the selected channel in volts
+    \item \verb|set_channel_offset(channel_id, scale)| sets the offset scale for the selected channel
+    \item \verb|autoscale()| enables the built-in autoscaling routine of the device. Equivalent to the physical Autoscale button.
+    \item \verb|find_offset(channel_id)| is a custom procedure that finds \textbf{both} vertical \textbf{scale} and \textbf{offset} that make the channel waveform fit the screen area
+
+\end{itemize}
+
+\noindent\textbf{GET} functions:
+
+\begin{itemize}
+    
+    \item \verb|get_timescale()| returns the current scale in seconds
+    \item \verb|get_timebase_pos()| returns the current horizontal offset of the waveform
+    \item \verb|get_channel_scale(channel_id)| returns the current vertical scale for the selected channel in volts
+    \item \verb|get_channel_offset(channel_id)| returns the current offset scale for the selected channel
+
+\end{itemize}
+
+\subsection*{Channel visibilty}
+
+A set of functions for showing or hiding selected channels.
+
+\begin{itemize}
+    
+    \item \verb|show_channel(channel_id)| enables measurement and display from the selected channel
+    \item \verb|hide_channel(channel_id)| disables the selected channel
+    \item \verb|hide_all_channels()| disables all input channels
+
+\end{itemize}
+
+\subsection*{Trigger}
+
+A set of functions for operating the trigger for the periodic signals.\\
+
+\noindent\textbf{SET} functions:
+
+\begin{itemize}
+    
+    \item \verb|set_trigger_source(channel_id)| sets which channel should serve as a source for the trigger
+    \item \verb|set_trigger_level(voltage)| sets the voltage level for the trigger
+
+\end{itemize}
+
+\noindent\textbf{GET} functions:
+
+\begin{itemize}
+    
+    \item \verb|get_trigger_source()| returns the ID of the channel the trigger is currently used for
+    \item \verb|get_trigger_level()| returns the level of the trigger
+
+\end{itemize}
+
+\subsection*{Operational}
+
+A set of functions controlling the overall operation mode of the device
+
+\begin{itemize}
+    
+    \item \verb|run()| enables continuous acquisition of the currently enabled (shown) channels
+    \item \verb|stop()| stops data acquisition, freezing the state of the shown waveforms within the screen area. Vertical and horizontal offsetting of the visible waveform pieces is still possible in this state.
+
+\end{itemize}
+
+\subsection*{Lower level access}
+
+\textit{Warning: use with caution as not all devices accept all of the SCPI commands. Sending wrong commands might lead to the bus being stuck, requiring device reboot.}\\
+
+Functions for passing custom SCPI commands through. Both functions accept a string that is passed to the oscilloscope. The only difference between the query and the command is the expectation of returned data in case of the former.
+
+\begin{itemize}
+    
+    \item \verb|do_command(command)| passes an SCPI command string to the device
+    \item \verb|do_query_string(query)| passes an SCPI query to the device, returning the response, and checks for any pending readback errors, as the pending errors might jam the output for any future queries. In case of the error, raises an exception with the error code.
+
+\end{itemize}

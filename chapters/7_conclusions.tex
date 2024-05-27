@@ -1,0 +1,18 @@
+\chapter{Conclusions}
+\label{ch:conclusions}
+
+Parameter heterogeneity is an inherent property of low-power electronics, so any computational framework utilizing such hardware must maintain processing robustness against that variability. The inspiration for variability coping approaches can be found in biology since the neural networks of the brain are known to be heterogeneous and unreliable (on the level of individual neurons) as well. 
+
+In this thesis, I show two general strategies for achieving robust computation using neuromorphic hardware: (i) averaging over the heterogeneous units (across space and/or time) to achieve uniform outputs, and (ii) adapting the system's parameters to compensate for variability using learning.
+
+Using the automated characterization method developed, I was able to quantify the degree of variability of the neurons of the DYNAP-SE1 board. Having that understanding, I explored the relation between the size of the neuronal cluster size and the mean spike rate integration time to reliably encode scalar values and was able to suggest the optimal configuration given the intended precision.
+
+%On our journey to achieving robust computation using these inhomogeneous and noisy neural computing substrates, we found that the basic principle of averaging the activity of multiple inhomogeneous neurons led to many more computational advantages that go well beyond the expected one of reducing the variance with the square root of the number of neurons, such as the control over the correlations in the input representation by establishing the right excitatory-inhibitory balance.
+
+Once the single cluster size and the connectivity density had been defined, we were able to construct clustered \ac{WTA} networks and configure the population-wide excitatory-inhibitory balance to demonstrate the nonlinear operations on the scalar values, signal restoration and working memory properties in the absence of input, as well as selective amplification, implementing the mechanism for decision making. Additionally, we found that the averaging principle applied to the temporal domain by converting the WTA to a delay line. Clustered delay lines showed to maintain speed of the activity pulses in them despite the variability of individual synaptic delays.
+
+%\dz{Personal interest section (should be moved further down):}
+We exploited the asynchronous routing scheme of the chip to implement an online spike-based neo-hebbian plasticity rule. We showed that the principles of cumulative weight updates and stochastic rounding help mitigate the initially restrictive on-chip constraints.
+With all of the principles combined, we could demonstrate on the DYNAP-SE1 board: an unsupervised cortical map formation, a closed-loop time-continuous reinforcement learning agent and structure capable of learning to discriminate overlapping temporal sequences. These network prototypes assume that they can be now reused and scaled up as a part of a more complex computational system.
+
+This work, therefore, demonstrates that reliable and robust computation can indeed be achieved using resource-constrained and inhomogeneous neuromorphic processing systems by adopting the same strategies and principles used by the nervous system.

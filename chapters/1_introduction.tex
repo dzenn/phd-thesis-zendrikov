@@ -1,7 +1,192 @@
+%\iffalse
+
+\section*{Foreword: the dream of neuromorphic intelligence}
+
+Humans are fascinated with building tools. These tools typically help with survival or provide convenience for specific tasks, as well as allow to study the reality around (some might say this quality is what generally made us human). It has only been a matter of time before this tool building trend would reach the field of intelligence, attempting to implement computation.
+
+In any tool-building direction, there is always a choice: take inspiration from nature, which has been finding solutions through trial and error over billions of years, or engineer a completely authentic solution. The most simple example of such an "authentic" solution in mechanics is a wheel. Continuous mechanical rotation is something that just does not exist in biology. If we followed purely biologically inspired direction, we would only build walkers as vehicles rather than cars.
+
+Interestingly, the popularity of wheels and combustion engines does not mean they remain the best solution for powered motion over the surface in all cases. There are many scenarios where "classic" biological legs work better. Uneven terrain, stairs, cluttered spaces. In fact, with the recent advances in robotics, walking robots with spring-like actuators beat wheeled platforms for certain applications. These advances have been made by taking a look back into the biology of skeletal muscles and the peripheral nervous system, helping to achieve fluid dynamic mechanical control (while still taking full advantage of electrical motor technology). I will try to use this as an analogy to compare development approaches in computation.\\
+
+The invention of transistors gave rise to tools implementing computation and logic electronically. Skipping way further down the line, we have industrial-scale production of processors able to perform billions of binary operations per second, providing us with incredibly precise, fast and reliable numerical calculations. However, precise calculations do not deal very well with uncertainty, where the mathematical function is unknown and has to be extracted from the observed data. This is where biology first inspired the design of an \ac{ANN} as a practical computational tool for mathematical function approximation. Following loosely the idea of having networks of interconnected mathematical units that provide outputs after having integrated inputs from other units they are connected to (thus capturing the core function of the neurons of the brain), and with a method of adjusting (i.e. training) efficacies of these connections based on the output of the output nodes of the network, powered by the binary processors, the \ac{ANN}s took off. Trained with loss function gradient backpropagation (i.e. attributing small changes to individual network weights based on whether the network gave the correct answer or not), deep ANNs managed to solve various kinds of tasks previously unavailable to algorithmic solvers~\cite{Sejnowski20}. Specifically, the ones where a lot of (labelled) data is available, so the network has enough examples to make training updates very small and can generalize and extract the features in the data to build the function from. So to speak, if you would like to create a sand painting, with this training method, you would spill the sand over a pattern engraved on a board underneath and begin vibrating the board until the grains of sand take the right shape; as opposed to doing manual sand ``hand-painting'' by pouring it through a hose, one stroke after another.
+
+In the scope of our analogy above, ANNs, although impressively functional and somewhat biologically inspired, are still \emph{the wheel}.\\
+
+The brain functions differently. Computation is done by neuron cells that integrate chemical or electrical inputs \emph{over time} and produce binary electrical pulses (a.k.a. action potentials, or spikes). This alone drastically differs from the mathematical neurons as it involves the concept of time. On top of that, on a system-level scale, brain connectivity is highly recurrent, with highly parallel processing happening in many structures at once. From the computational point of view, it is a dynamic system whose behaviour is affected by external inputs, but is not defined by them. It learns from small amounts of experiences, often unsupervised (so that it also has to estimate the relevance of the information); it deals with the uncertainty of incomplete pieces of information; it optimizes actions through reasoning and reliance on its internal environment representation, and much more. And while many of these processes and functions have been studied, it remains extremely challenging for an artificial system to combine them all together.%\dz{REF Spaun2 here from Nengo? or complex navigation AI? Chat-GPT?}\\
+
+If we accept that we would like to build some tools capable of such brain-like functionalities, the direction is two-fold: (a) to build such artificial systems, we need to understand the brain better; conversely, (b) one of the ways of studying it is through \emph{building} mathematical and physical prototypes that replicate its core functioning principles. Having replicated the low-level principles, the hope is that by scaling up and ``playing around'' with the emergent behaviour of such systems in the context of specific applications, we will identify and isolate individual aspects of brain function by ``knowing where to look'', as our search would be targeted by solving specific problems. Which, in turn, would promote both the tool design and the fundamental understanding of the brain. This approach can be called ``understanding by building" and is practically central to the research path covered in this thesis.\\
+
+So, what is the nature-inspired alternative to the ``wheel'' of traditional electronics in the hardware context? In the early '90s the field of research and development called \emph{neuromorphic engineering} branched out from the mainstream (von Neumann) electronic architectures by Carver Mead reimagining the use of the very same \ac{FET}~\cite{Mead90}. He proposed to use the analog subthreshold current behaviour of a MOSFET to emulate biophysical processes. The circuits of MOSFETs operating in subthreshold regime have to be thought about and designed very differently, as, contrary to digital circuits, the values of currents through the transistors and their dynamics matter, not just the binary state changes. Soon after, this principle (of exploiting device physics for direct emulation of bio-dynamics) was used to create a circuit that mimics the behaviour of the biological neuron's membrane voltage, producing the first "silicon neuron"~\cite{Mahowald_Douglas91}. Just like its biological prototype, this silicon neuron circuit integrates input currents and produces pulses in response. Such a neuron, implemented fully in hardware, is fundamentally divergent from the digital processor and its clocked operation. Instead, the neuron's state continuously evolves in time, meaning that its past inputs and states cannot be disentangled from its most recent input. This makes spiking neurons natively encode time, while digital systems only do it by approximating it with some sampling rate.
+
+This fundamental difference results in the fact there is no common way of ``programming'' spiking neural networks. All approaches to treat SNNs like ANNs practically remove the aspect of time from the spiking activity, as they integrate spikes into rates and treat irregularity of spiking as inconvenience and something that needs mitigating, rather than capturing.
+
+A search for efficient spike-based computation principles continues, as well as for the applications that are well-suited for them. 
+
+Since then, the development of analog circuits and the overall philosophy of emulation of dynamic processes through device physics of a different domain have been producing a wide variety of experimental hardware concepts and technologies~\cite{Christensen_etal22, Laughlin_Sejnowski03,Liu_Delbruck10,Liu_etal14,Chicca_etal14, Pfeil_etal13}, from just circuits for nonlinear operations like \ac{WTA} selective amplifiers~\cite{Starzyk_Fang93, Chicca_etal07}, to fully neurobiologically inspired event-based retinas~\cite{DVS}, cochleas~\cite{Liu_etal14a} and general purpose reconfigurable chips~\cite{Moradi_etal18, Neckar_etal19, Pehle_etal22}. Subsequently, these building blocks had been assembled into more complex neuromorphic systems replicating biological functions, such as a setup for stereopsis using single-event coincidence detection~\cite{Osswald_etal17, Risi_etal21}, learning robotic motor control inverse kinematics~\cite{Zhao_etal20} or even full end-to-end pipelines for object tracking~\cite{Serrano-Gotarredona_etal09}, demonstrating support for native processing of information directly on hardware. %\dz{Add a bit more examples here if there is time, but not too many. Scaramuzza: drones and odometry. Fussball from Tobi? Bidirectional BMI using ROLLS:~\cite{Boi_etal16}}
+
+%These designs had been, indeed, powered by the theoretical analysis and numerical simulations of spiking neurons and spiking neural networks (SNNs)~\cite{Brette_etal07}.
+
+
+And so the \emph{dream} of neuromorphic engineering is to create, through building, systems able to interact intelligently with their environments and learn from their experiences.
+%\fi
+
+%\dz{Dynamic Neural fields, Belief propagation networks for context-dependent computation. SLeep-wake cycles for memory consolidation? OCTA? Predictive coding? RObert Gutig's classification of labels? \cite{Gutig_Sompolinsky06}}
+
+
+%\dz{To finalize our analogy of wheeled and walking robots, let us review the limiting factors of conventional processors. INTRODUCE EDGE COMPUTING AND ENERGY SAVINGS}
+
+
+
+%\dz{Key idea: to understand how to build spiking systems, we need to actually build them. And play around.}
+
+%\dz{Questions we ask: how do we deal with temporal information? how do we compute with spikes? }
+
+
 \chapter{Introduction}
 \label{chapter:introduction}
-
 %\subsection{Thesis Objectives}
-\section{Thesis Outline}
+%Understanding by building is really the epitome of this work. While the tangible global task declared for the project had been to "build neuromorphic agents", it was formulated in a way that fosters bio-inspired methodological search, drastically constraining the field of possible solutions. This work represents the work philosophy and the results of what happens, when instead of paving a high-level path to a problem solution, one would rather focus on low-level details, crossing out some technologies and keeping the others, resulting in a small piece of this "edible pie" in the end, the intersection of all constraints. And only then, having this set of rules declared important, you begin to see what high-level task it would solve. This probably tells the story of a true bottom-up approach, spanning across multiple domains and converging to a functional prototype
 
-\subsection{Making neuromorphic hardware more accessible(??)}
+Understanding by building is the epitome of the work presented in this thesis. Initiated by a project with a distant goal of "building an autonomous neuromorphic agent", it was formulated in a way that fosters bio-inspired methodological search, drastically constraining the range of possible directions by forcing the use of a specific neuromorphic processor as the main computational platform. The work tells a story of a bottom-up system build path, where every step up in complexity is strongly constrained by the hardware properties.
+
+Neuromorphic engineering, started by Carver Mead in the early '90s~\cite{Mead90}, is a branch of electronic hardware design that focuses on emulating biophysical models directly through device physics. The origin point for neuromorphic hardware can be defined with the first silicon neuron: a circuit of \ac{CMOS} transistors operating in the subthreshold domain and producing spiking neuron dynamics~\cite{Mahowald_Douglas91}. Compared to numerical simulations of the neuron model using a digital processor, this approach brought several benefits. First, the subthreshold operation of the circuit meant that the currents through the transistors were extremely low (pA to mA), resulting in very low power consumption. Second, time in such \emph{analog} circuit is represented ``by itself'', meaning that no clock or synchronization mechanism is needed to coordinate multiple neurons.
+After more than thirty years of growth, modern neuromorphic engineering aims to provide a special purpose low-power alternative to power-hungry conventional computers through native dedicated support for spiking neural networks (SNNs)~\cite{Moradi_etal18,Neckar_etal19,Merolla_etal14a,Furber_Bogdan20,Pei_etal19}. Moving beyond the \ac{CMOS} technology, nowadays this approach extends to other materials like memristive or ferroelectric devices~\cite{Christensen_etal22,Spiga_etal20a,Chicca_Indiveri20,Xia_Yang19,Payvand_etal19,Boybat_etal18}.
+From the point of view of conventional electronics, such devices are noisy, unreliable or imprecise, as the low currents make them extremely sensitive to fabrication imperfections and variations in material properties. However, since the design of these devices is inspired by low-level biological considerations, interestingly, by induction, higher-level biological principles of recruiting them for computation also apply. These principles are what this thesis focuses on.
+
+The result is a set of computational network primitives that are capable of functionalities a ``neuromorphic agent'' would need, and a set of guidelines and tools for robust and convenient configuration of these primitives on the same device. Specifically, these functionalities for a hardware-configured SNN can be defined as the ability to (a) encode static or temporal signals and perform input filtering and restoration on them, (b) perform decision-making, (c) implement working (i.e. activity-based) memory and (d) learning.
+
+All of these functionalities can be implemented in multiple ways by digital systems, but with the analog noisy and heterogeneous spiking neurons of a neuromorphic chip, very specific strategies are needed to succeed. In this work, I identify these strategies and methodically move from the characterization of single neurons towards configuring populations and establishing the excitatory-inhibitory balance between them~\cite{Vreeswijk_Sompolinsky96,Shew_etal11,Lim_Goldman13}. I build on that by introducing population codes~\cite{Averbeck_etal06} to encode variables, and Winner-take-all (WTA)~\cite{Indiveri_etal15, Douglas_Martin07} structures.
+I propose a method of exploiting the dynamic reprogrammable routing scheme of the chip to enable learning. I then use this method to demonstrate learning applications in three different scenarios, opening the possibilities for more.\\
+
+
+%This work represents the work philosophy and the results of what happens, when instead of paving a high-level path to a problem solution, one would rather focus on low-level details, crossing out some technologies and keeping the others, resulting in a small piece of this "edible pie" in the end, the intersection of all constraints. And only then, having this set of rules declared important, you begin to see what high-level task it would solve. This probably tells the story of a true bottom-up approach, spanning across multiple domains and converging to a functional prototype
+
+%\section*{Computation and principles}
+%This thesis covers the are
+
+%This dissertation delves into the burgeoning field of neuromorphic computing and Spiking Neural Networks (SNNs), which stand at the confluence of artificial intelligence (AI), neuroscience, and computational engineering. This intersection aims to transcend the traditional paradigms of computing, primarily dominated by Turing machine concepts and the von Neumann architecture, by drawing inspiration from the operational principles of the human brain. The motivation behind this research stems from the burgeoning necessity for specialized, low-power devices capable of augmenting the capabilities of general-purpose, energy-intensive computers, especially within the realm of edge computing applications. This introduction outlines the historical context, the evolving methodologies, and the dual facets of promise and challenge that characterize this field.
+
+%\dz{With the advent of deep networks for artificial intelligence~\cite{Sejnowski20}, and the increasing need for special purpose low-power devices that can complement general-purpose power-hungry computers in ``edge computing'' applications~\cite{Hardware-Revolution18, Plastiras_etal18}, several types of event-based approaches for implementing \acp{SNN} in dedicated hardware have been proposed~\cite{Furber_Bogdan20,Neckar_etal19,Davies_etal18,Moradi_etal18,Merolla_etal14a,Pei_etal19}.}
+
+%\dz{While many of these approaches are focusing on supporting the simulation of large scale \acp{SNN}~\cite{Furber_Bogdan20,Davies_etal18,Pei_etal19}, on converting rate-based \acp{ANN} into their spike-based equivalent networks~\cite{Rueckauer_etal17,Midya_etal19,Li_etal21}, or on processing digitally stored data with digital hardware implementations~\cite{Cavigelli_Benini16,Aimar_etal19,Hu_etal22,Lu_etal22,Klein_etal22},
+%the original \emph{neuromorphic engineering} approach, first introduced in the early '90s, proposed to implement biologically plausible \acp{SNN} by exploiting the physics of subthreshold analog \ac{CMOS} circuits to directly emulate the bio-physics of biological neurons and synapses~\cite{Mead90,Mead20}.}
+
+%\dz{Today this approach has been extended to include emerging nano-scale memory technologies and a wide range of different types of memristive devices~\cite{Spiga_etal20a,Chicca_Indiveri20,Xia_Yang19,Payvand_etal19,Boybat_etal18,Christensen_etal22}.
+%While more difficult to control due to the analog and noisy nature of the subthreshold analog circuits and the variability of the memristive devices, this approach has the potential of leading to the construction of extremely compact and low-power brain-inspired neural processing systems~\cite{Laughlin_Sejnowski03,Liu_Delbruck10,Liu_etal14,Chicca_etal14}.
+%Neuromorphic processors built following this approach typically comprise many spiking neuron and dynamic synapse circuits that can be configured to carry out complex spike-based signal processing and learning tasks in real-time.
+%Similar to the biological neural systems they model, these types of neuromorphic systems are extremely low power, operate in a massively parallel fashion, and process information using both analog and asynchronous digital processing methods~\cite{Liu_etal14,Indiveri_Sandamirskaya19}; they are adaptive, fault-tolerant, and can be configured to display complex behaviors by combining multiple instances of neural computational primitives.
+%On the other hand, as these types of systems are radically different from standard computing platforms based on the Turing machine concept and the von Neumann architecture, there is no well established formalism for ``programming them'' to carry out pre-defined procedures.
+%Furthermore, due to their analog, continuous-time, and in-memory computing nature, they do not use bit-precise Boolean logic operations, they cannot represent signals with arbitrary precision, and do not support the storage of large amounts of state variables in dense and compact \ac{DRAM} memory blocks.
+%In particular, like their biological counterparts, their processing elements, such as the neuron and synapse analog circuits, are strongly affected by variability and device mismatch~\cite{Pelgrom_etal89,Serrano-Gotarredona_Linares-Barranco99,Sun_etal19}.
+%All these properties pose significant challenges to understanding how to use this technology to carry out robust computation, in the face of device variability, and without being able to use the classical formalism of computation based on Turing machines.}
+
+
+%We address the problem of achieving robust and reliable computation using underlying hardware that is noisy and highly variable.
+%This work is in line with the recent investigations that analyze the role of variability and heterogeneity in neural computation and that attempt to exploit it for improving learning performance~\cite{Lengler_etal13,Balasubramanian15,Perez-Nieves_etal20}.
+%Rather than attempting to minimize the effects of device variability with brute force approaches, we propose brain-inspired computational strategies to counteract, and even exploit, the effects of heterogeneity on spike-based computation.
+%We present neural computing primitives that use these strategies for representing and processing signals in a robust manner, and validate them using \ac{CMOS} neuromorphic chips designed following the original neuromorphic engineering approach~\cite{Mead90}.
+%In particular, we demonstrate how the use of population coding~\cite{Averbeck_etal06}, Excitatory-Inhibitory (E-I) balanced networks~\cite{Vreeswijk_Sompolinsky96,Shew_etal11,Lim_Goldman13}, and \ac{WTA} architectures~\cite{Maass00,Douglas_Martin07} can be exploited for controlling the precision of the signals in these neuromorphic circuits, and we demonstrate how the choice of using signal representations based on population codes, and brain-inspired computational primitives leads to important additional advantages in terms of speed of computation, coding efficiency, and power consumption.
+
+%\dz{THE FOLLOWING IS OLD NOTES AND WILL BE DELETED}
+
+%Intro structure:
+
+%Analog computation is here, and has been motivated by biological elegance of low level units, with the hope to create robust computational systems in the future. Designers have created neurons, sensors and whole wafers utilizing device physics to model biological processes. Now memristive devices are following up on the promise.\\
+
+%The motivation to build these devices seems to only vaguely be based on possible application, and more on the fundamental understanding if the biological computation can be reproduced. "Brains can do very complex things, so perhaps our hardware will too. Eventually".\\
+
+%Now, we face a challenge of making sense of the computational blocks we have to actually implement some of the brain functions. To do that, we end up applying biological principles to the elements we have, and use the biological inspiration in designing the future ones.\\
+
+%This work covers an exploratory path, trying to make sense of what comprises a "neuromorphic agent" (i.e. \dz{???}) and what are the essential components necessary for its robust behaviour.\\
+
+%What are the criteria which computational primitives are worth to be used? Good question.\\
+
+%What is intelligence and cognition? can we define the blocks needed using this criteria? Brain does not just do inference, it makes an internal world representation out of incomplete data, operates on it and tries to make optimal decisions. This processing seems to be embedded in how the information is stored and processed.
+
+%I focus on: neurons, synapses, populations, rate-based codes and basics of temporal processing. The goal is to close a sensorimotor loop: process inputs and produce outputs. They are inspired by computation in the primary visual and auditory (\dz{???}) cortex and hippocampus (WTA). The brain however does not just do a projection from the input space to the output \dz{unlike how ANN are seen}. The information flow is highly recurrent, different regions store and exchange a vast amount of various pieces of information about the world and \emph{learn} to deal with it adaptively (\dz{ensuring survival}). \dz{We demonstrate the principle of bidirectionality between neural structures}.
+
+%This means we need to explore the concepts of memory. Which kinds of memory are possible implement with spiking neurons, what are the principles behind. Following the neurobiological definition, we can define \dz{working and long-term} memory. \dz{MAIN POINT:} working memory is activity-based, while long-term memory is enabled by structural changes. \dz{also TIMESCALES}. I introduce network primitives enabling that capacity.\\
+
+%The brain deals not only with static inputs \dz{HOW DO YOU CALL THIS}, but temporal sequences. \dz{ON VARIOUS TIME SCALES DIFFERENT MECHANISMS ARE AT PLAY. Very long, very short, rates of change of the input etc.}. In a behaving system past experiences have to be made sense of to adapt for future encounters. Temporal mechanisms are \dz{Predictive coding, coincidence detection, or more complex structures like LSMs}.\\
+
+
+%While brain is vastly understudied because of the complexity of not only electrical, but chemical interactions, in our bottom-up build process we limit ourselves. \dz{By the use of deterministic elements? or how can i explain why LIF neurons are fun to play with while the rest are not.}. By ''playing'' with integrators, we can actually propose concrete implementations for lot of the computational components we discussed above. Furthermore, the biological principles by which we operate also turn out to solve some of the constraints of the hardware.
+
+All of the ideas for spiking neuromorphic processing discussed in this thesis have been designed and implemented in various forms of hardware by researchers over the years. However, hardware fabrication has always been a tough and time-consuming challenge, sometimes resulting in devices that can hardly communicate with each other and thus leaving them often in the status of only "proof-of-concept" prototypes. Some systems go deeper in terms of complexity than others, but their components still require a high amount of individual attention to function in harmony. With a general-purpose neuromorphic processor like DYNAP-SE, we can show how all of these computational primitives fit under the same umbrella of brain-inspired spiking network configuration strategies for the same hardware substrate. Thanks to all the tools and infrastructure I developed, in this thesis, I prove it by providing and characterizing the network examples for the required functionalities listed above. Finally, I discuss their role in the context of the future neuromorphic systems.
+
+
+\newpage
+\section*{Thesis Outline}
+
+The work presented in this thesis demonstrates hardware-compatible bio-inspired computational principles and their implementation on the DYNAP-SE1 chip. It also aims to provide guidelines (or ``recipies'') to how such networks should be configured and operated in a robust and reproducible manner.\\
+
+\textbf{Chapter~\ref{chapter:introduction}} is a brief introduction to the field of neuromorphic electronics, illustrating the principle of bottom-up "understanding by building" approach that the rest of the thesis structure follows. The second section of the chapter is modified from work~\cite{Zendrikov_etal23} published together with Dr. Giacomo Indiveri and Dr. Sergio Solinas.\\
+
+\textbf{Chapter~\ref{ch:introduction_to_hardware}} is a modified and expanded version of work~\cite{Zendrikov_etal23} published together with Dr. Giacomo Indiveri and Dr. Sergio Solinas. It introduces a characterization method for the neuromorphic chip, and an adaptive biasing scheme for setting parameters to achieve desired single neuron and population behaviour. We use the automated characterization tool I developed to report the degree of variability across the silicon circuits and confirm from measurements that it decreases with a square root of the number of units if they are clustered together. We propose an optimal cluster size as a sweet spot of neuron rate variability function of neuron cluster size and spike integration time window.\\
+
+\textbf{Chapter~\ref{ch:static_networks}} is a step up from single neurons to the configuration of fixed connectivity networks. We show that combination of excitatory and inhibitory populations of neurons allows us to configure neural \ac{WTA} structures capable of nonlinear operations and stable working memory elements. We analyse the impact of this EI coupling on activity correlations between the neurons in the cluster, as well as its interplay with the hardware constraints. This chapter is a modified and expanded version of the second half of the work~\cite{Zendrikov_etal23} published together with Dr. Giacomo Indiveri and Dr. Sergio Solinas. The expansion includes the \ac{hWTA} network measurements performed with Maryada for the 2021 ZNZ Symposium and an introduction into temporal coding structures obtained from \ac{WTA} with a small modification.\\
+
+\textbf{Chapter~\ref{ch:dynamic_connectome}} introduces a method of neural plasticity, showing how the DYNAP-SE1 chip's reconfigurable router can be used for learning. It motivates the selection of a specific bio-plausible learning rule of Reward-modulated STDP through hardware constraints and explores their origin.\\
+
+\textbf{Chapter~\ref{ch:EXAMPLES}} presents preliminary work on three on-chip network prototypes that utilize all of the principles presented in the chapters together, illustrating three key development directions for neuromorphic engineering: i) unsupervised distributed mapping formation between the two \ac{WTA} structures; ii) an example of the closed-loop setup of an agent learning to follow a target with reinforcement learning, developed together with Caterina Caccavella in the scope of her semester project in the NSC MSc program; iii) a prototype of a multiple delay line (or synfire chain) setup with supervised readout training for classification of overlapping temporal patterns.\\
+
+\textbf{Chapter~\ref{ch:discussion}} discusses the benefits and the limitations of the architectures presented, as well as the specifics of the ``hardware-based'' development route taken. It proposes future directions where these results could be taken.\\
+
+\textbf{Chapter~\ref{ch:conclusions}} summarizes the results as a path of scientific exploration and a milestone on the trajectory of the development of neuromorphic technologies, highlighting their significance.\\
+
+The results presented in this thesis are almost entirely obtained using the DYNAP-SE1 neuromorphic processor designed and produced at the Institute of Neuroinformatics by Dr. Ning Qiao, Dr. Saber Moradi, Dr. Fabio Stefanini and Dr. Giacomo Indiveri~\cite{Moradi_etal18}. The high-level software package used to control DYNAP-SE1, on top of which all my automation and processing tools are built, was developed by Carsten Nielsen at SynSense~\cite{Samna}.
+
+The use of ‘we’ in this thesis refers to me, the candidate, but also to the input received from the above-mentioned people in the respective parts of the thesis.
+
+\newpage
+
+
+
+\bigskip
+
+
+
+%\dz{In the next Section, we describe the types of neuromorphic systems that we use in this study and quantify the amount of variability present in the neurons, due to device mismatch.
+%In Section~\ref{sec:mismatch-compensation} we demonstrate how brain-inspired strategies can effectively reduce variability effects, with quantitative measurements, as a function of population size and integration time. 
+%Furthermore, we show how such strategies offer additional computational advantages, for example in increasing the precision of variable representations, in restoring signals, or in implementing working memory and state-dependent computation.
+%In Section~\ref{sec:discussion}, we discuss the benefits of adopting the principles of neural design~\cite{Sterling_Laughlin15} that we demonstrated with experimental data, and in Section~\ref{sec:conclusions} we present the concluding remarks.}
+
+
+
+%Extra measurements:
+
+%\begin{enumerate}
+
+ %  \item Time-profile spike counting within the framework, see how bad it is.
+ %  \item How EI population follows a sine (for EI balance)
+ %  \item WTA smallworldness measurement (Mean CC and avg SPL)
+ %  \item Delay chain rasterplot, show speed change with AMPA weight change
+  % \item Replicate Pavlovian RLSTDP protocol with DYNAP-SE1
+  % \item Fuller dynapse characterization of all cores of one board at least. Adaptation of the bias tuning tools class to samna.
+  % \item INH PLASTICITY, DISSOLVING THE EXC CLUSTER (maybe, one day)
+  % \item bump amplification details, percentages
+ %  \item compare quantized stochastic vs deterministic
+
+%\end{enumerate}
+
+
+%Information Capacity and Transmission Are Maximized in Balanced Cortical Networks with Neuronal Avalanches thesis: https://www.jneurosci.org/content/31/1/55
+
+%thesis: motivation from junren lowpower, data transfer is expensive, nonvolatile is good
+%(check paper)
+
+
+%emre: good to have structure, fine tuning for application
+
+%to thesis: the tradeoff between exploration and harwired for direct survival
+
+% Temperature compensation (Susanne Schreiber work)
+%thesis outline: self organizing delaylines with local rules. speculate
+
+%Discussion:
+%to thesis: sleep\\wake, memory consolidation to apply plastic changes
+
+%check this hippocampal paper http://dx.doi.org/10.1016/j.neuron.2021.07.029
+
+%evidence?
+%ltp and ltd happen only with bursts at the cellular level, not single pre-post spikes

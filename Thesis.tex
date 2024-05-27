@@ -14,33 +14,105 @@
 %             2013/03/08	(Soren Ebbesen)
 %             2014/03/13	(Soren Ebbesen)
 % ______________________________________________________________________________
-\documentclass[10pt,twoside,a4paper,fleqn]{report}
+%\documentclass[10pt,twoside,a4paper,fleqn]{report}
+\documentclass[11pt,twoside,a5paper,fleqn]{scrbook}
 
 %custom commands for comments of Supervisor (sv), phd candidate(pc)
-\newcommand{\sv}[1]{\textcolor{red}{{\bf SV:}~#1}}    
-\newcommand{\pc}[1]{\textcolor{cyan}{{\bf PC:}~#1}} 
+\newcommand{\gi}[1]{\textcolor{red}{{\bf GI:}~#1}}    
+\newcommand{\dz}[1]{\textcolor{magenta}{{\bf DZ:}~#1}} 
+
+
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\textbf}
+% text color
+\usepackage[svgnames,x11names,table]{xcolor}
 
 \usepackage[english,mt]{ethidsc} % Special IDSC styles and commands      	
 								 % {german}/english: language of headings, etc.
 								 % {st}/bt/mt: {semester}/bachelor/master thesis
-\usepackage{caption, subcaption}
+\usepackage[font=small, format=plain, width=.95\textwidth]{caption, subcaption}
+\usepackage{svg}
+\usepackage{tabularx}
+
+\usepackage[page,toc,titletoc]{appendix}
 % Image position [H]
 \usepackage{float} % table position
 %\usepackage{csvsimple} %(if want to add tables from csv. Otherwise use: https://www.tablesgenerator.com/latex_tables and import them from File->import csv file...)
 % Tables with cells that take multiple rows
 \usepackage{multirow}
+\usepackage{makecell}
+\usepackage{afterpage}
+
+\addtokomafont{disposition}{\rmfamily}
+% for epigraph
+\usepackage{epigraph}
+% for non-default font type
+\usepackage{kpfonts}
 % Allow for a new line in the same cell of a table (https://tex.stackexchange.com/questions/2441/how-to-add-a-forced-line-break-inside-a-table-cell/19678)
 \usepackage{makecell}
-% text color
-\usepackage{xcolor}
 % forests (used to represent classes in the code)
 \usepackage[edges]{forest}
-% forests (attempt II)
-\usepackage{forest}
 % acronym
-\usepackage{acronym}
+\usepackage[printonlyused]{acronym}
 % to include a pdf with the title page
 \usepackage{pdfpages}
+%\usepackage{minted}
+
+%\usepackage[round]{natbib} 
+
+\usepackage{amssymb}
+
+\usepackage{fancybox}
+\usepackage{listings}
+\usepackage{lscape}
+
+%\usepackage{titlesec}
+\newcommand{\sectionbreak}{\clearpage}
+
+\renewcommand{\baselinestretch}{1.2}
+
+
+\setlength{\parindent}{20pt}
+
+% set code listing style
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    %basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\hypersetup{ 	
+pdfsubject = {Thesis},
+pdftitle = {},
+pdfauthor = {},
+colorlinks=true,
+urlcolor=DarkBlue,
+linkcolor=DarkBlue,
+citecolor=DarkBlue,
+filecolor=DarkBlue,
+pdfborder={0 0 0}
+}
+%add fancy pyobject formatting
+\newcommand{\pyobject}[1]{\ovalbox{\color{purple}{\texttt{#1}}}}
+
 
 \usetikzlibrary{arrows.meta}
 \forestset{
@@ -72,14 +144,18 @@
 %\usepackage[utf8]{inputenc}
 
 % Page header (don't change)________________________________________________
-\setlength{\parindent}{0em}                 % Disable parindent
+%\setlength{\parindent}{0em}                 % Disable parindent
 \rhead[\nouppercase{\rightmark}]{\thepage}  % Special headings
 \lhead[\thepage]{\nouppercase{\leftmark}}   % Special headings
 \cfoot{}                                    % Special headings
 
 
 % Title page (please fill in)____________________________________________
-\title{Configuring networks on neuromorphic hardware}
+
+\title{Principles of Robust Neural Computation Through the Lens of Analog Neuromorphic Hardware}
+%\title{Brain-inspired adaptive computational primitives for analog asynchronous spiking neuromorphic processors\\ \bigskip
+%\small{ALT Title: A bottom-up journey towards embedded neuromorphic computing}}
+
 
 
 \studentA{Dmitrii Zendrikov}
@@ -88,8 +164,8 @@
 \emailA{dmitrii@ini.uzh.ch}
 
 
-\supervision{Prof. Dr. Giacomo Indiveri\\Dr. Matthew Cook\\Dr. Yulia Sandamirskaya}
-\date{November 2022}
+\supervision{Prof. Dr. Giacomo Indiveri\\Dr. Yulia Sandamirskaya\\Prof. Dr. Daniel Kiper}
+\date{25 April 2024}
 %\type{Ph.D. Thesis}
 %\identification{IDSC-XX-YY-ZZ} 		% Project identifier
 
@@ -99,7 +175,7 @@
 
 % Begin document___________________________________________________________
 \begin{document}
-\maketitle 							% Create title page
+%\maketitle 							% Create title page
 
 
 \newlength{\originalVOffset}
@@ -111,6 +187,12 @@
  \includepdf[pages=-]{Titelblatt.pdf}
  \setlength{\voffset}{\originalVOffset}
  \setlength{\hoffset}{\originalHOffset}
+
+\maketitle 							% Create title page
+
+\clearpage
+\thispagestyle{empty}
+\vspace*{\fill}
  
 % Preamble_______________________________________________________________
 
@@ -122,46 +204,58 @@
 \pagenumbering{arabic}				% Begin arabic page numbering (1,2,...)
 
 
-
 % Chapters______________________________________________________________________
-
-
-\input{chapters/1_introduction}
+\renewcommand\sectionbreak{} 
+\input{chapters/1_introduction.tex}
 \newpage
 
-\input{chapters/2_Modeling_and_emulation.tex}
+%\renewcommand{\sectionbreak}{\clearpage}
+\input{chapters/2_intro_to_neuromorphic}
 \newpage
 
-\input{chapters/3_signal_representations_in_neural_systems.tex}
+\input{chapters/3_static_networks}
 \newpage
 
-\input{chapters/4_neuromorphic_hardware.tex}
+\input{chapters/4_dynamic_networks}
 \newpage
 
-\input{chapters/5_relational_networks.tex}
+\renewcommand{\sectionbreak}{\clearpage}
+\input{chapters/5_network_prototypes}
+%\newpage
+\renewcommand\sectionbreak{} 
+
+\input{chapters/6_discussion}
 \newpage
 
-\input{chapters/6_plasticity_and_learning.tex}
-\newpage
-
-\input{chapters/7_network_prototypes.tex}
-\newpage
-
-\input{chapters/8_final_thoughts.tex}
+\input{chapters/7_conclusions}
 \newpage
 
 % Appendix______________________________________________________________________
+\renewcommand\sectionbreak{} 
+
 \appendix
+\begin{appendices}
+
 \input{chapters/app_A_PyScope}
 \input{chapters/app_B_BiasTuner}
 \input{chapters/app_C_DynapseGui_class_reference}
 \input{chapters/app_D_Network_primitives_class_reference}
+%\input{chapters/app_E_RLSTDP}
 
+\end{appendices}
 
 % Bibliography__________________________________________________________________
 % Literature (Additional references can be added to the .bib-file manually, or by using, for example, the free application JabRef). Compile in the following order: latex -bibtex -latex -latex
 
-\bibliographystyle{plain}
-\bibliography{biblio/biblioncs}
+\bibliographystyle{unsrt}
+\bibliography{biblio/biblioncs, biblio/extra_references}
+
+\newpage
+\listoffigures
+\listoftables
+
+\includepdf[pages=1,width=1.3\textwidth, offset=-3.1cm -1.5cm]{Dmitrii_Zendrikov_CV.pdf}
+\includepdf[pages=2,width=1.3\textwidth, offset=3.1cm -1.5cm]{Dmitrii_Zendrikov_CV.pdf}
+\includepdf[pages=3,width=1.3\textwidth, offset=-3.1cm -1.5cm]{Dmitrii_Zendrikov_CV.pdf}
 
 \end{document}
